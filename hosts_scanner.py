@@ -15,7 +15,7 @@ class AsyncTask:
             print(
                 'server doesn`t have a "hosts.json" file in project`s directory, please insert file and re-run script')
             exit()
-        return json.loads('hosts.json')['hosts']
+        return json.loads('hosts.json')
 
     async def takeDataFromClient(self, server, user, userpass):
         async with asyncssh.connect(server,
@@ -36,7 +36,7 @@ class AsyncTask:
     def fillDataFromHosts(self):
         hosts_data = self.readFromJsonFile()
         try:
-            for item in hosts_data:
+            for item in hosts_data['hosts']:
                 branch, revision = asyncio.get_event_loop().run_until_complete(self.takeDataFromClient(item['host'],
                                                                                                        item['user'],
                                                                                                        item['user']))
