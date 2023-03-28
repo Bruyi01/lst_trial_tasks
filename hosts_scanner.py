@@ -12,12 +12,16 @@ class AsyncTask:
 
     def readFromJsonFile(self):
         if os.path.isfile('hosts.json') is False:
-            print('server doesn`t have a "hosts.json" file in project`s directory, please insert file and re-run script')
+            print(
+                'server doesn`t have a "hosts.json" file in project`s directory, please insert file and re-run script')
             exit()
         return json.loads('hosts.json')['hosts']
 
     async def takeDataFromClient(self, server, user, userpass):
-        async with asyncssh.connect(server, username=user, password=userpass, known_hosts=None) as conn:
+        async with asyncssh.connect(server,
+                                    username=user,
+                                    password=userpass,
+                                    known_hosts=None) as conn:
             result = (await conn.run('cd ~/bw/ ; git branch -vv', check=True)).split(' ')[:2]
             if result.startwith('fatal'):
                 client_data_branch = await conn.run('cd ~/bw/ ; svn info | grep ^Revision',
@@ -48,6 +52,7 @@ class AsyncTask:
 def main():
     AT = AsyncTask()
     AT.fillDataFromHosts()
+
 
 if __name__ == '__main__':
     main()
